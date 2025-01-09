@@ -1,9 +1,13 @@
+use openzeppelin_token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+use starknet::ContractAddress;
 #[starknet::interface]
 pub trait IYourContract<TContractState> {
     fn greeting(self: @TContractState) -> ByteArray;
     fn set_greeting(ref self: TContractState, new_greeting: ByteArray, amount_eth: u256);
     fn withdraw(ref self: TContractState);
     fn premium(self: @TContractState) -> bool;
+    fn test_read_dispatcher(self: @TContractState, token: IERC20Dispatcher) -> ContractAddress;
+    fn test_write_dispatcher(ref self: TContractState, token: IERC20Dispatcher);
 }
 
 #[starknet::contract]
@@ -99,6 +103,13 @@ mod YourContract {
         }
         fn premium(self: @ContractState) -> bool {
             self.premium.read()
+        }
+
+        fn test_read_dispatcher(self: @ContractState, token: IERC20Dispatcher) -> ContractAddress {
+            token.contract_address
+        }
+        fn test_write_dispatcher(ref self: ContractState, token: IERC20Dispatcher) {
+            token.transfer(get_caller_address(), 0);
         }
     }
 }
