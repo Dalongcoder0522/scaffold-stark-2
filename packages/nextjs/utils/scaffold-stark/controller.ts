@@ -1,15 +1,22 @@
 "use client";
 
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
-import { jsonRpcProvider, publicProvider, starknetChainId, InjectedConnector } from "@starknet-react/core";
+import {
+  jsonRpcProvider,
+  publicProvider,
+  starknetChainId,
+  InjectedConnector,
+} from "@starknet-react/core";
 import ControllerConnector from "@cartridge/connector/controller";
 import { constants } from "starknet";
 import scaffoldConfig from "~~/scaffold.config";
 import { SessionPolicies } from "@cartridge/controller";
 
 // Constantes para contratos
-export const ETH_CONTRACT_ADDRESS = "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
-export const STRK_CONTRACT_ADDRESS = "0x04718f5a0Fc34cC1AF16A1cdee98fFB20C31f5cD61D6Ab07201858f4287c938D";
+export const ETH_CONTRACT_ADDRESS =
+  "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
+export const STRK_CONTRACT_ADDRESS =
+  "0x04718f5a0Fc34cC1AF16A1cdee98fFB20C31f5cD61D6Ab07201858f4287c938D";
 
 // Función para verificar si hay devnet en las redes objetivo
 const containsDevnet = (networks: readonly Chain[]) => {
@@ -18,10 +25,13 @@ const containsDevnet = (networks: readonly Chain[]) => {
 
 // Función para obtener el provider según la configuración
 export const getProvider = () => {
-  if (scaffoldConfig.rpcProviderUrl === "" || containsDevnet(scaffoldConfig.targetNetworks)) {
+  if (
+    scaffoldConfig.rpcProviderUrl === "" ||
+    containsDevnet(scaffoldConfig.targetNetworks)
+  ) {
     return publicProvider();
   }
-  
+
   return jsonRpcProvider({
     rpc: () => ({
       nodeUrl: scaffoldConfig.rpcProviderUrl,
@@ -34,28 +44,28 @@ export const getProvider = () => {
 const chains = [
   {
     id: constants.StarknetChainId.SN_SEPOLIA,
-    name: 'Sepolia',
-    rpcUrl: process.env.NEXT_PUBLIC_RPC_SEPOLIA ?? "https://api.cartridge.gg/x/starknet/sepolia",
+    name: "Sepolia",
+    rpcUrl:
+      process.env.NEXT_PUBLIC_RPC_SEPOLIA ??
+      "https://api.cartridge.gg/x/starknet/sepolia",
   },
   {
     id: constants.StarknetChainId.SN_MAIN,
-    name: 'Mainnet',
-    rpcUrl: process.env.NEXT_PUBLIC_RPC_MAINNET ?? "https://api.cartridge.gg/x/starknet/mainnet",
-  }
+    name: "Mainnet",
+    rpcUrl:
+      process.env.NEXT_PUBLIC_RPC_MAINNET ??
+      "https://api.cartridge.gg/x/starknet/mainnet",
+  },
 ];
 
 // Políticas para el controller
 const policies: SessionPolicies = {
   contracts: {
     [ETH_CONTRACT_ADDRESS]: {
-      methods: [
-        { name: "approve", entrypoint: "approve" },
-      ],
+      methods: [{ name: "approve", entrypoint: "approve" }],
     },
     [STRK_CONTRACT_ADDRESS]: {
-      methods: [
-        { name: "approve", entrypoint: "approve" },
-      ],
+      methods: [{ name: "approve", entrypoint: "approve" }],
     },
   },
 };

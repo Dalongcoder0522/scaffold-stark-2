@@ -4,6 +4,7 @@ import { BurnerConnector } from "@scaffold-stark/stark-burner";
 import scaffoldConfig from "~~/scaffold.config";
 import { LAST_CONNECTED_TIME_LOCALSTORAGE_KEY } from "~~/utils/Constants";
 import { controllerInstance } from "~~/utils/scaffold-stark/controller";
+import { KeplrConnector } from "./keplr";
 
 const targetNetworks = getTargetNetworks();
 
@@ -24,7 +25,11 @@ function withDisconnectWrapper(connector: InjectedConnector) {
 function getConnectors() {
   const { targetNetworks } = scaffoldConfig;
 
-  const connectors: InjectedConnector[] = [argent(), braavos()];
+  const connectors: InjectedConnector[] = [
+    argent(),
+    braavos(),
+    new KeplrConnector(),
+  ];
 
   if (
     targetNetworks.some((network) => (network.network as string) === "devnet")

@@ -8,7 +8,7 @@ import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
 import { useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-stark";
 import { useTargetNetwork } from "~~/hooks/scaffold-stark/useTargetNetwork";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-stark";
-import { useAccount, useNetwork } from "@starknet-react/core";
+import { useAccount, useNetwork, useConnect } from "@starknet-react/core";
 import { Address } from "@starknet-react/chains";
 import { useEffect, useMemo, useState } from "react";
 import ConnectModal from "./ConnectModal";
@@ -22,6 +22,7 @@ export const CustomConnectButton = () => {
   const networkColor = useNetworkColor();
   const { targetNetwork } = useTargetNetwork();
   const { account, status, address: accountAddress } = useAccount();
+  const { connector } = useConnect();
   const [accountChainId, setAccountChainId] = useState<bigint>(0n);
   const { chain } = useNetwork();
 
@@ -42,9 +43,25 @@ export const CustomConnectButton = () => {
 
       getChainId();
     }
-  }, [account]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, status]);
 
-  if (status === "disconnected") return <ConnectModal />;
+  useEffect(() => {
+    const handleChainChange = (event: { chainId?: bigint }) => {
+      const { chainId } = event;
+      if (chainId && chainId !== accountChainId) {
+        setAccountChainId(chainId);
+      }
+    };
+    connector?.on("change", handleChainChange);
+    return () => {
+      connector?.off("change", handleChainChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connector]);
+
+  if (status === "disconnected" || accountChainId === 0n)
+    return <ConnectModal />;
 
   if (accountChainId !== targetNetwork.id) {
     return <WrongNetworkDropdown />;
