@@ -1,5 +1,7 @@
-mod YourContract;
-#[cfg(test)]
-mod test {
-    mod TestContract;
-}
+mod Counter;
+// #[cfg(test)]
+// mod test {
+//     mod TestContract;
+// }
+
+
