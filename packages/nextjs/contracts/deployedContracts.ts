@@ -7,7 +7,7 @@ const deployedContracts = {
   devnet: {
     Counter: {
       address:
-        "0x7d0ea0eb19931af23585f0b22ff4f746acfbf343baa8be1afb2d78559169802",
+        "0x9949b032a1e292591d766bd927a3977633934fd6879c55bd9953296b1564e4",
       abi: [
         {
           type: "impl",

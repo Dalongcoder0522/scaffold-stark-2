@@ -1,7 +1,1 @@
-mod Counter;
-// #[cfg(test)]
-// mod test {
-//     mod TestContract;
-// }
-
-
+pub mod Counter;

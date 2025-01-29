@@ -9,8 +9,8 @@ edition = "2024_07"
 starknet = "2.9.2"
 
 [dev-dependencies]
+openzeppelin_utils = "0.20.0"
 snforge_std = "0.36.0"
-assert_macros = "2.9.2"
 
 [[target.starknet-contract]]
 casm = true
